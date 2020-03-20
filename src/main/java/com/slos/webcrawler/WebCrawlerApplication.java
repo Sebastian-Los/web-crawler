@@ -1,12 +1,15 @@
 package com.slos.webcrawler;
 
+import static java.lang.System.exit;
+
+import com.slos.webcrawler.jsoup.connector.JsoupConnector;
+import com.slos.webcrawler.jsoup.connector.JsoupConnectorApi;
 import com.slos.webcrawler.site.processor.SiteProcessor;
 import com.slos.webcrawler.site.processor.SiteProcessorApi;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
-import static java.lang.System.exit;
 
 @AllArgsConstructor
 public class WebCrawlerApplication {
@@ -17,7 +20,8 @@ public class WebCrawlerApplication {
     public static void main(String[] args) {
 
         List<String> processedURLs = new ArrayList<>();
-        SiteProcessorApi siteProcessor = new SiteProcessor();
+        JsoupConnectorApi jsoupConnectorApi = new JsoupConnector();
+        SiteProcessorApi siteProcessor = new SiteProcessor(jsoupConnectorApi);
         siteProcessor.processSite(URL, processedURLs, INITIAL_INDENT);
 
         exit(0);

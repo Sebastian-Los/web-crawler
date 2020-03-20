@@ -1,14 +1,14 @@
 package com.slos.webcrawler.site.processor;
 
+import com.slos.webcrawler.jsoup.connector.JsoupConnectorApi;
 import java.io.IOException;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
+import lombok.AllArgsConstructor;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-@Slf4j
+@AllArgsConstructor
 public class SiteProcessor implements SiteProcessorApi {
 
     private static final String REGULAR_INDENT = "    ";
@@ -25,10 +25,12 @@ public class SiteProcessor implements SiteProcessorApi {
     private static final String HTTPS_PREFIX = "https://";
     private static final String IMG_ATTRIBUTE = "img";
 
+    private final JsoupConnectorApi jsoupConnectorApi;
+
     public String processSite(String url, List<String> processedURLs, String currentIndent) {
         try {
             url = assureHttpsPrefix(url);
-            Document document = Jsoup.connect(url).get();
+            Document document = jsoupConnectorApi.connect(url);
             Elements media = document.select(MEDIA_TAG);
             Elements imports = document.select(IMPORTS_TAG);
             Elements links = document.select(LINKS_TAG);
@@ -45,7 +47,7 @@ public class SiteProcessor implements SiteProcessorApi {
         return currentIndent;
     }
 
-    String assureHttpsPrefix(String url) {
+    static String assureHttpsPrefix(String url) {
         return url.contains(HTTP_PREFIX) ? url.replace(HTTP_PREFIX, HTTPS_PREFIX) : url;
     }
 
