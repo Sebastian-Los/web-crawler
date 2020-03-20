@@ -69,15 +69,6 @@ public class SiteProcessorTest {
 
 		SiteProcessorApi siteProcessorApi = new SiteProcessor(jsoupConnectorApi);
 		siteProcessorApi.processSite(url, new ArrayList<>(), "");
-	}
-
-	@Test
-	@SneakyThrows
-	public void processSiteHttpTest() {
-		when(jsoupConnectorApi.connect("https://example.com")).thenThrow(new IOException("Wrong website"));
-
-		SiteProcessorApi siteProcessorApi = new SiteProcessor(jsoupConnectorApi);
-		siteProcessorApi.processSite("http://example.com", new ArrayList<>(), "");
 		assertThat(errContent.toString()).isEqualTo("For 'https://example.com': Wrong website\n");
 	}
 
